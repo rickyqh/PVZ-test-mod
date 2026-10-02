@@ -968,12 +968,12 @@ void Plant::UpdateShooter()
         {
             FindTargetAndFire(mRow, PlantWeapon::WEAPON_PRIMARY);
             
-            // --- TRACK PEASHOOTER FIRST ATTACK ---
+            // --- COUNT PEASHOOTER ATTACKS ---
             if (mSeedType == SeedType::SEED_PEASHOOTER)
             {
-                mDamageDealtThisLevel += 20;
+                mX += 1;
             }
-            // ------------------------------------
+            // --------------------------------
         }
     }
 
@@ -986,13 +986,6 @@ void Plant::UpdateShooter()
         if (mSeedType == SeedType::SEED_REPEATER || mSeedType == SeedType::SEED_LEFTPEATER)
         {
             FindTargetAndFire(mRow, PlantWeapon::WEAPON_PRIMARY);
-            
-            // --- TRACK REPEATER SECOND ATTACK ---
-            if (mSeedType == SeedType::SEED_REPEATER)
-            {
-                mDamageDealtThisLevel += 20;
-            }
-            // ------------------------------------
         }
         else if (mSeedType == SeedType::SEED_SPLITPEA)
         {
@@ -2906,6 +2899,7 @@ void Plant::UpdateReanim()
 
 //0x463E40
 //0x463E40
+//0x463E40
 void Plant::Update()
 {
     bool doUpdate = false;
@@ -2920,28 +2914,23 @@ void Plant::Update()
 
     if (doUpdate)
     {
-        // --- FRANKEN-PEA DAMAGE EVOLUTION LOGIC ---
+        // --- PEASHOOTER AUTOMATIC EVOLUTION LOGIC ---
+        // Checks the raw shot counter mid-game frame
         if (mSeedType == SeedType::SEED_PEASHOOTER)
         {
-            // Low threshold for quick testing: 1 hit deals 20 damage!
-            if (mDamageDealtThisLevel >= 20) 
+            // The second it fires its weapon exactly 1 time, it mutates!
+            if (mX >= 1) 
             {
                 mSeedType = SeedType::SEED_REPEATER;
+                
+                // Swap the visual puppet layers to the standard Repeater skeleton loop
                 this->SetAnimateState(ReanimationType::REANIM_REPEATER); 
+                
+                // Trigger the green upgrade particle flash effect on its lawn cell
                 mBoard->NewPlantEffect(mPlantCol, mPlantRow, EffectType::EFFECT_EVOLVE);
             }
         }
-        else if (mSeedType == SeedType::SEED_REPEATER)
-        {
-            // Next tier: After dealing 40 more damage (60 total), it changes into a Threepeater
-            if (mDamageDealtThisLevel >= 60) 
-            {
-                mSeedType = SeedType::SEED_THREEPEATER;
-                this->SetAnimateState(ReanimationType::REANIM_THREEPEATER);
-                mBoard->NewPlantEffect(mPlantCol, mPlantRow, EffectType::EFFECT_EVOLVE);
-            }
-        }
-        // ------------------------------------------
+        // --------------------------------------------
 
         UpdateAbilities();
         Animate();
