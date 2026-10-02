@@ -18,7 +18,7 @@ jobs:
         run: cmake -B build -G "Visual Studio 17 2022" -A Win32
 
       - name: Compile Windows Executable Binary
-        run: cmake --build build --config Release
+        run: cmake --build build --config Release -- /p:ForceImportBeforeCppTargets="" /p:CL_MPCount=4 /p:AdditionalOptions="/p:CL_MPCount=4 /EHsc /wd4996 /wd4477"
 
       - name: Upload Playable Game Zip Artifact
         uses: actions/upload-artifact@v4
