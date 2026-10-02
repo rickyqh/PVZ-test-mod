@@ -966,6 +966,13 @@ void Plant::UpdateShooter()
         else
         {
             FindTargetAndFire(mRow, PlantWeapon::WEAPON_PRIMARY);
+            
+            // --- PEASHOOTER COMBAT FLAG ROUTINE ---
+            if (mSeedType == SeedType::SEED_PEASHOOTER)
+            {
+                mShootingCounter = 777; // Signal the update loop to evolve
+            }
+            // --------------------------------------
         }
     }
 
@@ -2907,16 +2914,18 @@ void Plant::Update()
         // --- PEASHOOTER AUTOMATIC EVOLUTION LOGIC ---
         if (mSeedType == SeedType::SEED_PEASHOOTER)
         {
-            // The absolute second the internal firing countdown activates, mutate!
-            if (mLaunchCounter < 10) 
+            // If the shooter tracking flag activates upon weapon discharge, trigger mutation
+            if (mShootingCounter == 777) 
             {
                 mSeedType = SeedType::SEED_REPEATER;
                 
-                // Swap visual layers to the standard Repeater skeleton loop
+                // Swap structural skeleton system to the standard Repeater loops
                 this->SetAnimateState(ReanimationType::REANIM_REPEATER); 
                 
-                // Trigger the green upgrade particle flash effect on its lawn cell
+                // Trigger the green upgrade particle level flash effect on its cell
                 mBoard->NewPlantEffect(mPlantCol, mPlantRow, EffectType::EFFECT_EVOLVE);
+                
+                mShootingCounter = 0; // Clean out the message flag
             }
         }
         // --------------------------------------------
@@ -2930,6 +2939,7 @@ void Plant::Update()
         UpdateReanim();
     }
 }
+
 
 
 //0x463EF0
