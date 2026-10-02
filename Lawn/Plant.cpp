@@ -2905,6 +2905,7 @@ void Plant::UpdateReanim()
 }
 
 //0x463E40
+//0x463E40
 void Plant::Update()
 {
     bool doUpdate = false;
@@ -2920,25 +2921,19 @@ void Plant::Update()
     if (doUpdate)
     {
         // --- FRANKEN-PEA DAMAGE EVOLUTION LOGIC ---
-        // Runs automatically mid-game when targets are struck
         if (mSeedType == SeedType::SEED_PEASHOOTER)
         {
-            // Low damage threshold for testing: 
-            // 1 standard pea hit deals 20 damage. It triggers instantly!
+            // Low threshold for quick testing: 1 hit deals 20 damage!
             if (mDamageDealtThisLevel >= 20) 
             {
                 mSeedType = SeedType::SEED_REPEATER;
-                
-                // Updates the underlying visual skeleton system to draw the Repeater head/body
                 this->SetAnimateState(ReanimationType::REANIM_REPEATER); 
-                
-                // Triggers the flashy green upgrade particle effect on its grid slot
                 mBoard->NewPlantEffect(mPlantCol, mPlantRow, EffectType::EFFECT_EVOLVE);
             }
         }
         else if (mSeedType == SeedType::SEED_REPEATER)
         {
-            // Next tier: After dealing 40 more damage (60 total), it mutates into a Threepeater!
+            // Next tier: After dealing 40 more damage (60 total), it changes into a Threepeater
             if (mDamageDealtThisLevel >= 60) 
             {
                 mSeedType = SeedType::SEED_THREEPEATER;
