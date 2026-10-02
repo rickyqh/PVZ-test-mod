@@ -13,9 +13,10 @@ set(CMAKE_CONFIGURATION_TYPES
 
 set(CMAKE_CXX_STANDARD 23)
 
-# @Patoke todo: probably add MSVC counterparts?
+# Fix for MSVC cloud compilation errors in SEHCatcher
 if(MSVC)
     set(universal_compiler_flags "")
+    add_compile_options(/permissive /wd4477 /wd4996)
 else()
     #set(universal_compiler_flags "-fsanitize=undefined -fsanitize-trap -pthread -fuse-ld=lld -fno-omit-frame-pointer -fstack-protector-all -fms-extensions -fdiagnostics-color=always -gdwarf-2 -O0")
     set(universal_compiler_flags "-pthread -fuse-ld=lld -fms-extensions -march=native -fdiagnostics-color=always -O3")
