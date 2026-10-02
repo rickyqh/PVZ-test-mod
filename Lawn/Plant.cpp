@@ -2890,7 +2890,6 @@ void Plant::UpdateReanim()
 }
 
 //0x463E40
-//0x463E40
 void Plant::Update()
 {
     bool doUpdate = false;
@@ -2908,12 +2907,12 @@ void Plant::Update()
         // --- PEASHOOTER AUTOMATIC EVOLUTION LOGIC ---
         if (mSeedType == SeedType::SEED_PEASHOOTER)
         {
-            // If the plant locks onto a zombie target in its lane, trigger evolution
-            if (mTargetZombieID != 0) 
+            // The absolute second the internal firing countdown activates, mutate!
+            if (mLaunchCounter < 10) 
             {
                 mSeedType = SeedType::SEED_REPEATER;
                 
-                // Swap visual layers to the standard Repeater loop
+                // Swap visual layers to the standard Repeater skeleton loop
                 this->SetAnimateState(ReanimationType::REANIM_REPEATER); 
                 
                 // Trigger the green upgrade particle flash effect on its lawn cell
@@ -2931,7 +2930,6 @@ void Plant::Update()
         UpdateReanim();
     }
 }
-
 
 
 //0x463EF0
