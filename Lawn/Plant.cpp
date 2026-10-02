@@ -933,6 +933,7 @@ void Plant::StarFruitFire()
 }
 
 //0x45F8A0
+//0x45F8A0
 void Plant::UpdateShooter()
 {
     mLaunchCounter--;
@@ -966,13 +967,6 @@ void Plant::UpdateShooter()
         else
         {
             FindTargetAndFire(mRow, PlantWeapon::WEAPON_PRIMARY);
-            
-            // --- COUNT PEASHOOTER ATTACKS ---
-            if (mSeedType == SeedType::SEED_PEASHOOTER)
-            {
-                mCountdown = 999;
-            }
-            // --------------------------------
         }
     }
 
@@ -2896,6 +2890,7 @@ void Plant::UpdateReanim()
 }
 
 //0x463E40
+//0x463E40
 void Plant::Update()
 {
     bool doUpdate = false;
@@ -2913,18 +2908,16 @@ void Plant::Update()
         // --- PEASHOOTER AUTOMATIC EVOLUTION LOGIC ---
         if (mSeedType == SeedType::SEED_PEASHOOTER)
         {
-            // The instant it fires 1 single shot, it mutates!
-            if (mCountdown == 999) 
+            // If the plant locks onto a zombie target in its lane, trigger evolution
+            if (mTargetZombieID != 0) 
             {
                 mSeedType = SeedType::SEED_REPEATER;
                 
-                // Swap visual layers to the Repeater skeleton loop
+                // Swap visual layers to the standard Repeater loop
                 this->SetAnimateState(ReanimationType::REANIM_REPEATER); 
                 
                 // Trigger the green upgrade particle flash effect on its lawn cell
                 mBoard->NewPlantEffect(mPlantCol, mPlantRow, EffectType::EFFECT_EVOLVE);
-                
-                mCountdown = 0; // Reset it so it doesn't loop infinitely
             }
         }
         // --------------------------------------------
