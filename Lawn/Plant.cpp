@@ -933,7 +933,6 @@ void Plant::StarFruitFire()
 }
 
 //0x45F8A0
-//0x45F8A0
 void Plant::UpdateShooter()
 {
     mLaunchCounter--;
@@ -987,6 +986,7 @@ void Plant::UpdateShooter()
         }
     }
 }
+
 
 //0x45F980
 bool Plant::MakesSun()
