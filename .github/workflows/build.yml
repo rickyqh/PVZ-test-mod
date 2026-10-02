@@ -1,0 +1,27 @@
+name: Compile PvZ Mod
+on: [push, workflow_dispatch]
+
+jobs:
+  build-windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Microsoft Visual Studio Compiler
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install CMake Build Helper
+        uses: lukka/get-cmake@latest
+
+      - name: Configure CMake Engine
+        run: cmake -B build -G "Visual Studio 17 2022" -A Win32
+
+      - name: Compile Windows Executable Binary
+        run: cmake --build build --config Release
+
+      - name: Upload Playable Game Zip Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Custom-PvZ-Game-Exe
+          path: build/Release/*.exe
